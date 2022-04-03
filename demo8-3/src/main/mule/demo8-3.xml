@@ -14,12 +14,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<http:listener doc:name="Listener" doc:id="14772a47-f808-4f6f-bf1d-0a7145a5aac8" config-ref="HTTP_Listener_config" path="/api"/>
 		<set-payload value="Order01" doc:name="Order01" doc:id="1d07c9a1-e5d1-4964-b7ac-c400cc1b8325" />
 		<set-variable value="1" doc:name="quantity to 1" doc:id="6a2d45e2-ea4e-4aac-8d5b-651987b45948" variableName="quantity "/>
-		<logger level="INFO" doc:name="before httprequest attributes.queryParams.color" doc:id="7b635210-fe68-4c9b-a539-312118c999c7" message="#[attributes.queryParams.color]" />
-		<logger level="INFO" doc:name="Logger" doc:id="9cd3dbf1-70c0-416c-8e43-46599844126e" message="#[payload]"/>
-		<http:request method="GET" doc:name="Request" doc:id="fe73e854-49cb-4fdb-b5de-0ccf1ec7bb47" config-ref="HTTP_Request_configuration" path="/other"/>
-		<logger level="INFO" doc:name="payload" doc:id="a71669f9-6415-4ceb-9e4b-c5c5a91a4be7" message="#[payload]"/>
-		<logger level="INFO" doc:name="vars.quantity" doc:id="f5266612-a8ad-46ff-9f32-cb278ba68e19" message="#[vars.quantity]"/>
-		<logger level="INFO" doc:name="affter httprequest attributes.queryParams.color" doc:id="eb3a13a5-07d3-45e4-9940-cf5b19019063" message="#[attributes.queryParams.color]" />
+		<logger level="INFO" doc:name="before attributes" doc:id="7b635210-fe68-4c9b-a539-312118c999c7" message="#[attributes.queryParams.color]" />
+		<logger level="INFO" doc:name="before payload" doc:id="9cd3dbf1-70c0-416c-8e43-46599844126e" message="before payload: #[payload]"/>
+		<http:request method="GET" doc:name="other" doc:id="fe73e854-49cb-4fdb-b5de-0ccf1ec7bb47" config-ref="HTTP_Request_configuration" path="/other"/>
+		<logger level="INFO" doc:name="after payload" doc:id="a71669f9-6415-4ceb-9e4b-c5c5a91a4be7" message="after payload: #[payload]"/>
+		<logger level="INFO" doc:name="after vars.quantity" doc:id="f5266612-a8ad-46ff-9f32-cb278ba68e19" message="#[vars.quantity]"/>
+		<logger level="INFO" doc:name="affter attributes" doc:id="eb3a13a5-07d3-45e4-9940-cf5b19019063" message="#[attributes.queryParams.color]" />
 	</flow>
 	<flow name="subFlow1" doc:id="9d25eccb-1288-4d09-b3dc-051469cfdbb5" >
 		<http:listener doc:name="other" doc:id="9e9b3b34-66b1-4dee-8ddb-b55c4f14f75d" config-ref="HTTP_Listener_config" path="/other"/>

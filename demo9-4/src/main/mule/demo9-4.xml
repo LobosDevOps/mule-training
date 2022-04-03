@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="9730b98b-4978-4bdd-b891-cb693515d1b6" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo9-4Flow" doc:id="03a97001-f16d-4607-b99b-826b6e71eda1" >
+		<http:listener doc:name="Listener" doc:id="1cdc52d3-a9ef-4f45-9e24-29d9aea1759d" config-ref="HTTP_Listener_config" path="/api"/>
+		<choice doc:name="Choice" doc:id="1c9f5c9d-d2f6-4734-ac3e-2886c3a9252a" >
+			<when expression="#[true]">
+				<logger level="INFO" doc:name="Route 1" doc:id="023b2c39-4ad9-4c9e-a1e1-a2a78363dbaf" message="Route 1"/>
+			</when>
+			<when expression="#[true]">
+				<logger level="INFO" doc:name="Route 2" doc:id="ca4ec020-e116-4909-978c-41ea5f621abb" message="Route 2"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Default" doc:id="19b17069-503f-4ab0-8426-4b1a4776aa43" message="Default"/>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

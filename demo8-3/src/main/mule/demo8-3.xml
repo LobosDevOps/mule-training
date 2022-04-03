@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="327ba58e-cb4b-4ed8-9df7-d84349e48fa3" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="6ccb2710-b441-433f-bc8f-d5e374de35ac" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="demo8-3Flow" doc:id="81b79fd7-2340-4cc7-a731-e67cc1b7001c" >
+		<http:listener doc:name="Listener" doc:id="14772a47-f808-4f6f-bf1d-0a7145a5aac8" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="Order01" doc:name="Order01" doc:id="1d07c9a1-e5d1-4964-b7ac-c400cc1b8325" />
+		<set-variable value="1" doc:name="quantity to 1" doc:id="6a2d45e2-ea4e-4aac-8d5b-651987b45948" variableName="quantity "/>
+		<logger level="INFO" doc:name="before httprequest attributes.queryParams.color" doc:id="7b635210-fe68-4c9b-a539-312118c999c7" message="#[attributes.queryParams.color]" />
+		<logger level="INFO" doc:name="Logger" doc:id="9cd3dbf1-70c0-416c-8e43-46599844126e" message="#[payload]"/>
+		<http:request method="GET" doc:name="Request" doc:id="fe73e854-49cb-4fdb-b5de-0ccf1ec7bb47" config-ref="HTTP_Request_configuration" path="/other"/>
+		<logger level="INFO" doc:name="payload" doc:id="a71669f9-6415-4ceb-9e4b-c5c5a91a4be7" message="#[payload]"/>
+		<logger level="INFO" doc:name="vars.quantity" doc:id="f5266612-a8ad-46ff-9f32-cb278ba68e19" message="#[vars.quantity]"/>
+		<logger level="INFO" doc:name="affter httprequest attributes.queryParams.color" doc:id="eb3a13a5-07d3-45e4-9940-cf5b19019063" message="#[attributes.queryParams.color]" />
+	</flow>
+	<flow name="subFlow1" doc:id="9d25eccb-1288-4d09-b3dc-051469cfdbb5" >
+		<http:listener doc:name="other" doc:id="9e9b3b34-66b1-4dee-8ddb-b55c4f14f75d" config-ref="HTTP_Listener_config" path="/other"/>
+		<logger level="INFO" doc:name="Logger" doc:id="8ac2d165-25a2-41b2-87bc-fb8b1ba5fbf2" message="#[payload]"/>
+	</flow>
+</mule>

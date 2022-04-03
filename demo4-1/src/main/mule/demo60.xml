@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="21cd4999-92a0-4043-9729-a15fa950fbd0" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="5ee88bbf-3246-4804-9db2-434607b630a4" >
+		<db:my-sql-connection host="${db.username}" port="3306" user="mule" password="mule" database="training" />
+	</db:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="c4d7f35e-99c9-4be0-956b-121158097865" file="config.yaml" />
+	<flow name="demo4-1Flow" doc:id="27bc365d-39e2-4015-95b6-6a46f321caac" >
+		<http:listener doc:name="Listener" doc:id="baa4f9e2-8d96-48e4-af0d-cdbd49939304" config-ref="HTTP_Listener_config" path="/api"/>
+		<db:select doc:name="Select" doc:id="5629ec08-90fe-437e-bea9-a79fc410c298" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT * FROM american WHERE id = 999]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="f87351b4-b7f8-4834-9cb5-bc283dfc3ab7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="3249ea80-258a-436e-b812-542209f3bdd8" message="#[payload]"/>
+	</flow>
+</mule>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="188494ca-2e6e-417e-941e-532f3b7e4ef0" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo4-9Flow" doc:id="7f78f1bb-9fef-4045-9773-c883ded35aa3" >
+		<http:listener doc:name="Listener" doc:id="808cc75e-0453-47e8-b2f4-15a08ee3568e" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="Cars" doc:name="Cars" doc:id="99988994-f5ce-4fe4-b895-f2461958d08b" />
+		<set-variable value="model" doc:name="model" doc:id="ed208ce0-00a1-49c0-bc8a-87c735d5932c" variableName="model"/>
+		<flow-ref doc:name="Flow Reference" doc:id="8a0b2d6f-3b3a-4453-be47-0d214fd01e16" name="child"/>
+	</flow>
+	<flow name="child" doc:id="498045af-dcf4-4ca8-bd81-9f590ec26f0c" >
+		<logger level="INFO" doc:name='child "payload:" ++ payload ++ ", vars:" ++ vars.model ++ ", params:" ++ attributes.queryParams.modelType' doc:id="d6f9ceef-1cc7-404f-8627-844c336d463d" message='#["payload:" ++ payload ++ ", vars:" ++ vars.model ++ ", params:" ++ attributes.queryParams.modelType]'/>
+	</flow>
+</mule>

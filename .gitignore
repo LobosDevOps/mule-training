@@ -1,0 +1,8 @@
+.mule/**
+.mule/**/*
+.metadata
+.tool*
+
+
+wt*/
+*.zip

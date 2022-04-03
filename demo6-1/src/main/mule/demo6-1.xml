@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ce0718c9-edc4-4a59-a01a-a7648234e7dc" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo6-1Flow" doc:id="bb860b6d-9026-4250-94ba-be9a639797d4" >
+		<http:listener doc:name="Listener" doc:id="82a3f886-b353-4fdc-9688-1807c06fb136" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="start" doc:name="start" doc:id="8fecf900-2ed2-4a71-8400-fe5114b89aaf" />
+		<set-variable value="0" doc:name="count=0" doc:id="c1146962-5973-4d44-9a4a-9a81fdd815f8" variableName="count"/>
+		<set-payload value="Processing" doc:name="Processing" doc:id="d168359e-0783-4e34-b287-c00727d73d23" />
+		<set-variable value="1" doc:name="count=1" doc:id="33a5bff2-b042-4b90-9343-e8c53f3b691d" variableName="count" />
+		<set-payload value="Complete" doc:name="Complete" doc:id="af0a2133-6c4a-4457-a33b-7df30e53094d" />
+	</flow>
+</mule>

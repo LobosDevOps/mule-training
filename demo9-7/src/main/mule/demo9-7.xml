@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="980bfa82-df3e-45ba-8528-ad23d796dd0b" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo9-7Flow" doc:id="7136f834-e9e2-4ad6-948e-ba0efffb0255" >
+		<http:listener doc:name="Listener" doc:id="34e37c06-6e4f-47f2-95e2-6a34b63b73e5" config-ref="HTTP_Listener_config" path="/api" />
+		<set-payload value="before" doc:name="before" doc:id="cc47d44c-51f7-4010-a8a6-c40d6c74863b" />
+		<validation:is-blank-string doc:name="payload" doc:id="61a8eeb0-357e-4455-887b-64df36d57168" value="#[payload]"/>
+		<set-payload value="after" doc:name="after" doc:id="cd85c3d6-39a8-4d1b-bfa1-e1040461752f" />
+	</flow>
+</mule>

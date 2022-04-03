@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3a177137-fa58-473a-8791-1e1f5175e5d7" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="a0e605e5-2321-466e-a39a-4fd4eecd49e6" >
+		<db:my-sql-connection host="mudb.learn.mulesoft.com" port="3306" user="mule" password="mule" database="training" />
+	</db:config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="1c9f628e-db42-4631-8616-8d07ae6dcb86" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="demo8-4Flow" doc:id="3eaa56a1-29e4-44cf-b734-da2f55e0f929" >
+		<http:listener doc:name="Listener" doc:id="872c279d-3db7-41dc-9238-39724bd21719" config-ref="HTTP_Listener_config" path="/api" />
+		<db:select doc:id="e7dbc81b-4016-4afd-bac1-7d00fd5b57b5" config-ref="Database_Config" doc:name="Select" >
+			<db:sql ><![CDATA[SELECT * FROM american WHERE id = 1]]></db:sql>
+		</db:select>
+		<set-variable value="#[payload]" doc:name="save payload" doc:id="b6b7c5d0-f5bc-4f58-aa2d-40db39e3f12b" variableName="databaseResult"/>
+		<http:request method="GET" doc:name="Request" doc:id="b55a8e3f-b4bd-4129-8440-6fc42ed63e66" config-ref="HTTP_Request_configuration" path="/other"/>
+		<logger level="INFO" doc:name="var" doc:id="af572f48-ad84-41b6-8b69-668500be3959" message="#[vars.databaseResult]"/>
+		<logger level="INFO" doc:name="payload" doc:id="8a4acd7b-e2bb-49d0-932f-096f44e3e1b1" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="ba7faaaa-9165-46b0-a61d-d4d2feca2010" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	(payload),
+	(vars.databaseResult)
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="46246035-60f5-4226-a095-61e316417d0e" message="#[payload]" />
+	</flow>
+	<flow name="otherFlow" doc:id="ae9d8863-000c-419d-a985-af5d43e086e3" >
+		<http:listener doc:name="Listener" doc:id="48494c41-7b37-4a86-b125-a305c6e13484" config-ref="HTTP_Listener_config" path="/other"/>
+		<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;  test: "sample json"&#10;}]' doc:name="Set Payload to json" doc:id="b3c66a5b-6c3c-41fa-8d15-0dd43043b868" />
+	</flow>
+</mule>

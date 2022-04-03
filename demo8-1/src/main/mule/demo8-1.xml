@@ -13,8 +13,8 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<flow name="demo8-1Flow" doc:id="e6f4f871-d69a-422b-9705-c3af752f241b" >
 		<http:listener doc:name="post json" doc:id="1c539afc-420b-4e69-8dae-c0940a9724d4" config-ref="HTTP_Listener_config" path="/api" allowedMethods="GET"/>
 		<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;  test: "sample json"&#10;}]' doc:name="Set Payload to json" doc:id="6443418a-74cd-456e-a2a9-2f7e387231fc" />
-		<http:request method="POST" doc:name="subflow post other" doc:id="c57d68fc-b862-4838-928b-aa8f45d13ba1" config-ref="HTTP_Request_configuration" path="/other" target="result"/>
-		<logger level="INFO" doc:name="var: result" doc:id="2d08b6e9-d751-437e-a4de-8dfe63d3d0b1" message="var: result: #[vars.result]"/>
+		<http:request method="POST" doc:name="subflow post other" doc:id="c57d68fc-b862-4838-928b-aa8f45d13ba1" config-ref="HTTP_Request_configuration" path="/other" target="theResult"/>
+		<logger level="INFO" doc:name="var: theResult" doc:id="2d08b6e9-d751-437e-a4de-8dfe63d3d0b1" message="var: result: #[vars.theResult]"/>
 		<logger level="INFO" doc:name="payload: after post" doc:id="ba4fb30f-3309-4882-8d7f-cdbd1ece462f" message="after post : #[payload]" />
 	</flow>
 	<flow name="subflow" doc:id="caec5d1d-45b2-47ca-8e87-4ee9fd45f140" >

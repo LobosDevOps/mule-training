@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="dbdaf767-d5e2-402f-a002-8309104e4c3c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo9-5Flow" doc:id="841401dd-8540-4760-9f15-4261654e0dba" >
+		<http:listener doc:name="Listener" doc:id="58afecb9-162b-4bd5-a353-cf2d09e9dfa2" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="US" doc:name="US" doc:id="0fd0f2f9-4e6d-4a71-b312-5334beb678a5" />
+		<choice doc:name="Choice" doc:id="2c2ae1fe-8e61-4c90-8960-a19355fed8ac" >
+			<when expression='#[payload == "US"]'>
+				<logger level="INFO" doc:name="US" doc:id="282a24d8-631c-41b7-aef5-57ff9559dd5e" message="US"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="DEFAULT" doc:id="ce8b6b75-9be0-4334-975d-2a2457895db0" message="DEFAULT"/>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

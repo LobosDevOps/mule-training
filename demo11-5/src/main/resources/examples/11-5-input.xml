@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?> 
+<order> 
+	<item orderId="592"> 
+		<item>T-Shirt</item> 
+		<size>L</size> 
+		<quantity>1</quantity> 
+		<price>10</price> 
+	</item> 
+	<item orderId="1592"> 
+		<item>T-Shirt</item> 
+		<size>XL</size> 
+		<quantity>1</quantity> 
+		<price>10</price> 
+	</item> 
+</order>

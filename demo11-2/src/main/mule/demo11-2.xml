@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="57c73597-3448-4790-9077-b4b4e49d6a2a" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo11-2Flow" doc:id="99f3a01d-7c3c-4892-a455-c77f325f1731" >
+		<http:listener doc:name="Listener" doc:id="5b48c12f-0629-4b91-be56-9de1420816a8" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-variable value="#[attributes.queryParams.accountType]" doc:name="attributes.queryParams accountType" doc:id="05391a37-52b2-4fb4-9920-a3047faf0625" variableName="accountType"/>
+		<logger level="INFO" doc:name="var accountType" doc:id="6e7a7086-5d99-4556-89b3-bb659e8399e8" message="Account Type: #[vars.accountType]"/>
+	</flow>
+</mule>

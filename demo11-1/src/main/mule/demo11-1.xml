@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="demo11-1Flow" doc:id="ebc64a9d-63aa-4b5d-bae7-109b8ecfb903" >
+		<scheduler doc:name="Scheduler" doc:id="4868ea9f-c375-486a-a33a-56e88a0710ff" >
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</scheduler>
+		<set-payload value='#[{"user_info":&#10;	{&#10;		"user_id": "A1234567",&#10;		"user_name": "Yamada Taro"&#10;	}&#10;}]' doc:name="Set to JOSN" doc:id="927e6a49-5299-48fe-bbae-b058abf83d48" />
+		<logger level="INFO" doc:name="typeOf(payload)" doc:id="b09b04b7-8775-4cb6-9612-453fc60dbeda" message="#[typeOf(payload)]"/>
+	</flow>
+</mule>

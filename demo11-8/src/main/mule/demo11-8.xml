@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a3cd7c2d-30ec-49fd-8c73-00ae8cc7af6e" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo11-8Flow" doc:id="f216ebd2-2cb8-463c-8bf0-2552dc8211cd" >
+		<http:listener doc:name="Listener" doc:id="c20cb0c4-4e42-4924-9b2c-4d72aa0ae97c" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-variable value="#[1]" doc:name="itemID" doc:id="8ccdc062-e709-42f3-b7db-cb966d64ca5d" variableName="itemID"/>
+		<set-variable value='#["Category"]' doc:name="productCategory" doc:id="e40c28eb-7188-4b71-99ed-81176afb9b71" variableName="productCategory"/>
+		<ee:transform doc:name="Transform Message" doc:id="64587a9d-931b-4898-b493-ec47a5d770b1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+fun newProdCode(itemID: Number, productCategory: String) 
+     = "PC-" ++ productCategory ++ (itemID as String)
+---
+newProdCode(vars.itemID, vars.productCategory)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

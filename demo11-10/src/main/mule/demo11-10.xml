@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="9c7c5dcb-bda8-43ed-8812-d28b1fedd44f" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo11-10Flow" doc:id="9c4b47fa-6508-4a64-affe-2a834f24626e" >
+		<http:listener doc:name="Listener" doc:id="1fe9ddb7-dc1e-4037-9376-4c18113e158c" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload doc:name="Set Payload" doc:id="8a776535-f568-4e28-8a36-531d42b6d9bb" value='#[lookup( "addltem", { price: "100", item: "router", itemType: "cable" } )]'/>
+		<logger level="INFO" doc:name="Logger" doc:id="34c8ed40-d8c0-4307-be06-259f576966a0" message="#[payload]"/>
+	</flow>
+	<flow name="addltem" doc:id="c0220ada-b72c-4e47-afc0-a558529c46ab" >
+		<set-payload value="#[%dw 2.0&#10;output application/json&#10;---&#10;order: {&#10;	item: {&#10;		itemName: payload.item,&#10;		itemType: payload.itemType,&#10;		price: payload.price&#10;	}&#10;}]" doc:name="Set Payload" doc:id="c3164ecc-179b-41a7-a2ce-726a26b8dc84" />
+	</flow>
+</mule>

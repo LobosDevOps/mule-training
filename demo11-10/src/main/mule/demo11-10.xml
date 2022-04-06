@@ -9,8 +9,13 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</http:listener-config>
 	<flow name="demo11-10Flow" doc:id="9c4b47fa-6508-4a64-affe-2a834f24626e" >
 		<http:listener doc:name="Listener" doc:id="1fe9ddb7-dc1e-4037-9376-4c18113e158c" config-ref="HTTP_Listener_config" path="/api"/>
-		<set-payload doc:name="Set Payload" doc:id="8a776535-f568-4e28-8a36-531d42b6d9bb" value='#[lookup( "addltem", { price: "100", item: "router", itemType: "cable" } )]'/>
-		<logger level="INFO" doc:name="Logger" doc:id="34c8ed40-d8c0-4307-be06-259f576966a0" message="#[payload]"/>
+		<set-payload doc:name="addltem" doc:id="8a776535-f568-4e28-8a36-531d42b6d9bb" value='#[lookup( "addltem", { price: "100", item: "router", itemType: "cable" } )]'/>
+		<logger level="INFO" doc:name="addltem" doc:id="34c8ed40-d8c0-4307-be06-259f576966a0" message="#[payload]"/>
+		<set-payload value='#[lookup ( "createCustomerObject", { first: "Alice", last: "Green"} )]' doc:name="createCustomerObject" doc:id="abac9388-36dd-4bf2-86fe-865b93ad1a1f" />
+		<logger level="INFO" doc:name="createCustomerObject" doc:id="353124c2-c7b5-4d07-a731-e90faf33ec42" message="#[payload]"/>
+	</flow>
+	<flow name="createCustomerObject" doc:id="61353bc9-da53-4d79-a154-73d1e0ad8a2c" >
+		<set-payload value="#[%dw 2.0&#10;output application/json&#10;---&#10;order: {&#10;	item: {&#10;		first: payload.first,&#10;		last: payload.last&#10;	}&#10;}]" doc:name="Set Payload" doc:id="47d31377-9b2a-4985-a2f3-f9217f029dac" />
 	</flow>
 	<flow name="addltem" doc:id="c0220ada-b72c-4e47-afc0-a558529c46ab" >
 		<set-payload value="#[%dw 2.0&#10;output application/json&#10;---&#10;order: {&#10;	item: {&#10;		itemName: payload.item,&#10;		itemType: payload.itemType,&#10;		price: payload.price&#10;	}&#10;}]" doc:name="Set Payload" doc:id="c3164ecc-179b-41a7-a2ce-726a26b8dc84" />

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="92250680-da08-47fe-a250-f19785d8155d" >
+		<db:my-sql-connection host="mudb.learn.mulesoft.com" port="3306" user="mule" password="mule" database="training" />
+	</db:config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="c4053ba1-9e04-45c3-8d82-d6ca81ab3c6f" >
+		<file:connection workingDir="C:\work\Mulesoft\mule-training\demo12-2\src\test\resources" />
+	</file:config>
+	<flow name="demo12-2Flow" doc:id="8e8fccff-8ec2-4a9a-a726-517a2ebf89c9" >
+		<file:listener doc:name="orders.csv" doc:id="86037f9c-7c65-41eb-af02-034ee30cd961" config-ref="File_Config" directory="input" moveToDirectory="bak">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+			<file:matcher filenamePattern="*.csv" />
+		</file:listener>
+		<set-payload value="#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	orderId: payload[0].orderid&#10;}]" doc:name="set to orderId of first row" doc:id="f21e1fef-d875-413d-9724-8fb7578e4b78" />
+		<set-variable doc:name="Set orderId to None" doc:id="9f3f67f4-41af-4841-9dac-db0f31b3ee49" variableName="orderId" value='""'/>
+		<db:select doc:name="Select" doc:id="d4f3e24d-c07b-4802-af56-ee5fbd090c6a" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT * FROM american WHERE id = :ID]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{ID: payload.orderId}]]]></db:input-parameters>
+		</db:select>
+		<logger level="INFO" doc:name="payload" doc:id="1e85d549-fc3a-4a08-b617-2a09bf88b1be" message="#[payload]"/>
+	</flow>
+</mule>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="ex3" doc:id="7d767ecc-12e6-4f32-8670-ded800e061fd" >
+		<http:listener doc:name="ex3 port:7000" doc:id="848b8543-512b-48e3-80a9-ec03c56c876b" config-ref="HTTP_Listener_config_7000" path="/ex3" />
+		<logger level="INFO" doc:name="ex3" doc:id="946f1f0b-40c0-4da3-b7d2-ceb2428d41c0" message="ex3" />
+	</flow>
+	<flow name="ex4" doc:id="8f6b5e9d-26fa-4b60-910b-3d61e2512f37" >
+		<http:listener doc:name="ex4 port:6000" doc:id="75830e5d-adca-4d13-803c-432f56890512" config-ref="HTTP_Listener_config_6000" path="/ex4" />
+		<logger level="INFO" doc:name="ex4" doc:id="c9a66739-648a-49c9-9e17-b9321799ee37" message="ex4" />
+	</flow>
+</mule>

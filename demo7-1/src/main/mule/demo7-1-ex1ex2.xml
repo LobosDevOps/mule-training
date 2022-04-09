@@ -13,12 +13,4 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<http:listener doc:name="ex1 port:8000" doc:id="b6eb53e1-1259-41ac-a437-1283af74b99d" config-ref="HTTP_Listener_config_8000" path="/ex2" />
 		<logger level="INFO" doc:name="Logger" doc:id="6856907b-883b-4164-84ca-7ecc64befacc" message="ex2" />
 	</flow>
-	<flow name="ex3" doc:id="7d767ecc-12e6-4f32-8670-ded800e061fd" >
-		<http:listener doc:name="ex3 port:7000" doc:id="848b8543-512b-48e3-80a9-ec03c56c876b" config-ref="HTTP_Listener_config_7000" path="/ex3" />
-		<logger level="INFO" doc:name="ex3" doc:id="946f1f0b-40c0-4da3-b7d2-ceb2428d41c0" message="ex3" />
-	</flow>
-	<flow name="ex4" doc:id="8f6b5e9d-26fa-4b60-910b-3d61e2512f37" >
-		<http:listener doc:name="ex4 port:6000" doc:id="75830e5d-adca-4d13-803c-432f56890512" config-ref="HTTP_Listener_config_6000" path="/ex4" />
-		<logger level="INFO" doc:name="ex4" doc:id="c9a66739-648a-49c9-9e17-b9321799ee37" message="ex4" />
-	</flow>
 </mule>

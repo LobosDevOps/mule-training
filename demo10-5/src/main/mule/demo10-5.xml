@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="495c3a3c-9e41-4365-867e-64c53f4037c4" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="777bb0a8-353f-44bc-b52c-f4e7eafd74a0" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="demo10-5Flow" doc:id="a77e6320-85d3-497b-b42e-400119312fe1" >
+		<http:listener doc:name="Listener" doc:id="ca06cc08-bcfc-4056-8e9e-ed38d9a6f01a" config-ref="HTTP_Listener_config" path="/api"/>
+		<http:request method="GET" doc:name="HTTP: GET data" doc:id="3e5f78e4-8aa9-415f-9c6d-59ed4e6d16af" config-ref="HTTP_Request_configuration" path="/data">
+			<error-mapping sourceType="HTTP:NOT_FOUND" targetType="APP:RESOURCE_NOT_FOUND" />
+		</http:request>
+		<set-payload value="Success - main flow" doc:name="Success - main flow" doc:id="bddbaf08-4c8b-47bb-a541-dc49b7c1731d" />
+		<error-handler >
+			 
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="cb61dceb-0fd9-4397-b885-52634685be28" type="HTTP:NOT_FOUND">
+				<set-payload value="HTTP:NOT_FOUND" doc:name="HTTP:NOT_FOUND" doc:id="761a7d70-bb45-4408-98bd-6252ab1b2cc9" />
+			</on-error-propagate>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="e6490a01-f3ca-4848-9069-70fe622e51a0" type="APP:RESOURCE_NOT_FOUND">
+			<set-payload value="APP:RESOURCE_NOT_FOUND" doc:name="APP:RESOURCE_NOT_FOUND" doc:id="0b72e9c0-6e0f-490a-913f-38aebadd033d" />
+		</on-error-continue>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="8140902f-8a2d-41c5-a09d-035c25f64a32" when="#[true]">
+				<set-payload value="Other Error" doc:name="Other Error" doc:id="25d41d23-10ef-4fd4-a17e-1f7fca4108ab" />
+			</on-error-continue>
+			<!--
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="6da7005c-820c-402a-819b-c08bfd9f510d" type="ANY">
+				<set-payload value="HTTP:NOT_FOUND" doc:name="HTTP:NOT_FOUND" doc:id="0100c6a2-7bea-47f6-91c6-b2ba180715f6" />
+			</on-error-continue>
+			-->
+		
+</error-handler>
+	</flow>
+
+</mule>

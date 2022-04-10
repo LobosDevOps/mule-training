@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a7d8f785-66a9-4d63-b8ff-4c20464effa5" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="0d9501d2-80e8-4486-bca7-e5ea1d8a477c" >
+		<file:connection workingDir="/Users/tachibanaryouichi/Documents/Mule/mule-training/demo10-2/src/test/resources1" />
+	</file:config>
+	<flow name="demo10-2Flow" doc:id="80609f29-4fa3-4531-9da2-8f2105ebc45d" >
+		<http:listener doc:name="Listener" doc:id="0ef0636d-ba6e-4143-9005-8a35ef5ac892" config-ref="HTTP_Listener_config" path="/api" allowedMethods="POST"/>
+		<file:write doc:name="Write" doc:id="b826e8c9-7f6d-49fd-8cbb-27263623d4d9" config-ref="File_Config" path="output"/>
+		<set-payload value="File writen" doc:name="File writen" doc:id="c4ae3a9d-928b-494a-b30b-c1819f6b9c16" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="de6650a0-c66c-4677-ac20-4a9a339adbaa" type="FILE:CONNECTIVITY">
+				<set-payload value="FILE:CONNECTIVITY" doc:name="FILE:CONNECTIVITY" doc:id="5e54b2a6-442c-45f2-b77f-c5f1545337e2" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<error-handler name="demo10-2Error_Handler" doc:id="09440beb-6028-4ccd-bbcd-4cde2bbac004" >
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="8500cbb8-4c45-46b5-a420-238a80d4ea31" type="FILE:CONNECTIVITY">
+			<set-payload value="FILE:CONNECTIVITY Flow Error" doc:name="FILE:CONNECTIVITY Flow Error" doc:id="274a9f35-7328-4a39-8ae1-afd49f9dba04" />
+		</on-error-continue>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="30b99a50-294b-4ded-9d14-9a9d4b9f94e1" when="true">
+			<set-payload value="OTHER ERROR" doc:name="OTHER ERROR" doc:id="16ba7bc2-e50e-4ed0-a45c-d55c046216a9" />
+		</on-error-propagate>
+	</error-handler>
+</mule>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<flow name="demo10-1Flow" doc:id="2f0e53d1-7ec4-4953-be2f-922470c5b1f4" >
+		<http:listener doc:name="Listener" doc:id="b097ba50-b83b-40d0-b793-8dc21e1f5a2d" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="test" doc:name="Set Payload to test" doc:id="9eb12148-af51-4934-a5f9-586fbe7625a8" />
+		<validation:is-null doc:name="check payload" doc:id="4c9f4c52-51e7-4006-aac4-fbf2b7b0108e" value="#[payload]"/>
+		<logger level="INFO" doc:name="payload" doc:id="359d20f5-060b-419a-9bcc-63ae31d4890e" message="#[payload]"/>
+	</flow>
+</mule>

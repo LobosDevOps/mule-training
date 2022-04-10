@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f9d1c8d5-e507-4db7-a36a-331013b4db84" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="012e3d90-47aa-4252-ae78-d81bb8bb6475" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="demo10-4Flow" doc:id="85d77340-0040-4ac5-aaaf-b55454df6043" >
+		<http:listener doc:name="Listener" doc:id="08a35359-8338-482d-b644-fa0ca5ed2ad0" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="Sucess-Begin" doc:name="Sucess-Begin" doc:id="f2459941-f23a-4fd7-9120-849526eb28ba" />
+		<http:request method="CONNECT" doc:name="Request" doc:id="554b1e6f-5b77-410f-9590-bb9e34e3a8cd" config-ref="HTTP_Request_configuration" path="/data"/>
+		<set-payload value="Sucess-End" doc:name="Sucess-End" doc:id="06471cb1-d242-44e9-bfa1-961d269ec1fd" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="dd9f4162-d050-4584-a763-f441c43a1e75" >
+				<set-payload value="Error" doc:name="Error" doc:id="0c48f125-c12b-456c-9d5e-ff4fa965f651" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>

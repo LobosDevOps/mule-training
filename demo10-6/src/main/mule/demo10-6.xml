@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="13696da8-e255-4119-aa49-6ca8c523c446" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo10-6Flow" doc:id="875403e5-0014-4783-aa31-141daf2093a6" >
+		<http:listener doc:name="Listener" doc:id="38082984-74ac-488f-82e4-3ee66d0f910c" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="abc" doc:name="Payload string" doc:id="26255ca4-136c-466f-ac23-02863f5b907f" />
+		<flow-ref doc:name="private-flow" doc:id="d530ad33-a5ae-4923-a054-d5bae878b159" name="private-flow"/>
+		<set-payload value="success: main flow" doc:name="success: main flow" doc:id="32a75870-4ec8-4815-bd9a-4514b36a220b" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="590724ef-f704-4be6-b065-e5f18dd56708" >
+				<set-payload value="error: main flow" doc:name="error: main flow" doc:id="882a6a56-2bc6-4096-8121-9e6737afac0f" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="private-flow" doc:id="8ac00ede-dc04-4a3f-bda8-8d9b10e5166a" >
+		<validation:is-number doc:name="Is number" doc:id="53bf0a60-2a26-49f5-a6f0-5c0ff55c189e" value="#[payload]" numberType="INTEGER"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="ee83d64a-36bb-48fe-8854-adf674cbc76b" >
+				<set-payload value="Error - private flow" doc:name="Error - private flow" doc:id="0ddf43d3-d0af-4033-a06a-f09d9f90d6d1" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>

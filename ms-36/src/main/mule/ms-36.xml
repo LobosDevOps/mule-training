@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="141b411f-0795-423a-ada8-9ad3dce19787" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="7f3ccf51-ac21-4461-935e-c18ab404e51c" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="ms-36Flow" doc:id="3eb9b64a-2b39-416a-bced-225db5a7381f" >
+		<http:listener doc:name="Listener" doc:id="327c7397-298a-4cba-8739-650a0d8e453b" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="plane service history" doc:name="plane service history" doc:id="b79db059-e141-452d-8ecd-bf7d8afec0af" />
+		<set-variable value="" doc:name="planeModel" doc:id="a8cd48d9-40b4-41b8-a246-cb67714bf8f8" variableName="planeModel"/>
+		<logger level="INFO" doc:name="main attribute: #[attributes]" doc:id="6b3fcf13-b6a4-4f64-aea9-58c159d52d66" message="main attribute: #[attributes]"/>
+		<http:request method="POST" doc:name="post /child" doc:id="859ca3fe-3a47-47e3-a1d5-959d5acf94ce" config-ref="HTTP_Request_configuration" path="/child"/>
+	</flow>
+	<flow name="ms-36Flow1" doc:id="26f4cb07-560c-4f3b-b59a-c03fae2cf31d" >
+		<http:listener doc:name="post /child" doc:id="3d8e516e-3d1c-441d-bfdf-801d6dd00809" config-ref="HTTP_Listener_config" path="/child" allowedMethods="POST"/>
+		<logger level="INFO" doc:name="payload: #[payload] ; var: #[vars]; attribute: #@#[attributes]" doc:id="e73b5245-fc8d-49cd-a2c5-d974a0ed58d1" message="payload: #[payload] ; var: #[vars]; attribute: #@#[attributes]"/>
+	</flow>
+</mule>

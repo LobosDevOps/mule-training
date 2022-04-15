@@ -1,0 +1,5 @@
+http:
+  host: "localhost"
+  port8000: "8000"
+  port7000: "7000"
+  port6000: "6000"

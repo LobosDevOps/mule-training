@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1b850806-36c5-4395-9daa-2f9af0194156" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="f072a5a0-0cc8-4aa2-87ce-4959bdc79e02" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="ms-44Flow" doc:id="fd694d27-e719-4cc5-a2c6-a1c6e1920b9d" >
+		<http:listener doc:name="Listener" doc:id="e77f7714-f4e9-450d-84d9-a78922577dcc" config-ref="HTTP_Listener_config" path="/api"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="364dad24-09ac-4eb2-9ed6-af2d9d6f84eb" >
+			<route >
+				<http:request method="GET" doc:name="get /child1" doc:id="07d08319-0620-4bc9-b718-aa87c5d0e03f" config-ref="HTTP_Request_configuration" path="/child1"/>
+			</route>
+			<route >
+				<http:request method="GET" doc:name="get /child2" doc:id="4dc562f4-bda3-4b1f-8aee-ff8f4a9eab70" config-ref="HTTP_Request_configuration" path="/child2"/>
+			</route>
+			<route >
+				<http:request method="GET" doc:name="get /child3" doc:id="70fe31b0-0831-41b4-a598-7da4d6e1a524" config-ref="HTTP_Request_configuration" path="/child3"/>
+			</route>
+		</scatter-gather>
+		<ee:transform doc:name="Transform Message" doc:id="c33405c6-c92b-492d-ac46-1cfc62ef6709" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="child1" doc:id="613a4893-7925-413b-8055-1b641fbfd859" >
+		<http:listener doc:name="/child1" doc:id="d91e794f-f451-4e3b-abd4-57bc30fa46d1" config-ref="HTTP_Listener_config" path="/child1"/>
+		<set-payload value="child1" doc:name="child1" doc:id="e3053fe8-011e-4b30-9c2c-130ebbf3d8e4" />
+	</flow>
+	<flow name="child2" doc:id="07037439-6e47-4644-ae91-342f39ed1326" >
+		<http:listener doc:name="child2" doc:id="c3ea94a5-52dd-4dae-a212-5a91c30d7a74" config-ref="HTTP_Listener_config" path="/child2" />
+		<set-payload value="child2" doc:name="child2" doc:id="8d6629f0-ea47-409b-9cf7-43ef609e6d20" />
+	</flow>
+	<flow name="child3" doc:id="a2b15801-478e-4e13-aab7-a68130a7fc23" >
+		<http:listener doc:name="child3" doc:id="189a23fc-6b00-4cf8-8ccd-e54264e9fadb" config-ref="HTTP_Listener_config" path="/child3" />
+		<set-payload value="child3" doc:name="child3" doc:id="4669e72b-60b9-40e7-80aa-97bd81866d2d" />
+	</flow>
+</mule>

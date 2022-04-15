@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4a50cfac-fbc6-4a21-b319-42f9e8fa1f16" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="36a40c1a-a1e2-4f67-ae8a-95127e751c01" >
+		<db:my-sql-connection host="mudb.learn.mulesoft.com" port="3306" user="mule" password="mule" database="training" />
+	</db:config>
+	<flow name="ms-16Flow" doc:id="59b2c14d-68f7-482e-bcae-4ef3961becdd" >
+		<http:listener doc:name="Listener" doc:id="eea14c79-7266-4268-8ec8-2a0ff84dd5bc" config-ref="HTTP_Listener_config" path="/api"/>
+		<db:select doc:name="Select" doc:id="344101ad-5100-4c8d-abf9-b262bf8b9c07" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT * FROM american WHERE fromAirport = :fromAirport AND toAirport = :toAirport]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{fromAirport: 'MUA', toAirport: 'LAX'}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="eb3d9607-601b-428a-810d-8f26335ab36e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

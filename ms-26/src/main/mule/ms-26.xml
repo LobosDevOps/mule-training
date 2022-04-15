@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="96c2062c-858f-48b9-986d-4569809e8562" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="ms-26Flow" doc:id="c3ec9c19-b511-404d-a6f8-e24849e04342" >
+		<http:listener doc:name="Listener" doc:id="7a156393-4b45-4176-be17-99457e4d8be6" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="success begin main flow" doc:name="success begin main flow" doc:id="854f6ebb-bbe5-4f44-9f89-4c9318f63f2b" />
+		<validation:is-number numberType="INTEGER" doc:name="payload" doc:id="69c94df5-b0d4-4442-a5ad-e4cbdfb779ad" value="#[payload]"/>
+		<set-payload value="success end main flow" doc:name="success end main flow" doc:id="550ed32a-ce2d-44b3-b002-1b935190c529" />
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="99b4efb8-b789-459c-8668-6434e5e748ad" >
+				<set-payload value="error main flow" doc:name="error main flow" doc:id="d372b65c-fc2b-4aa7-902d-333a53d8b144" />
+				<logger level="INFO" doc:name="test" doc:id="4a536278-c648-4632-ae98-13612f6a8907" message="test"/>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

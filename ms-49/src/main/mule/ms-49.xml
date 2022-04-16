@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f0c87772-2e06-4537-bec9-c2b59f1aaa69" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="ms-49Flow" doc:id="2d389f53-27cf-4bc1-aced-644a87c72651" >
+		<http:listener doc:name="Listener" doc:id="38c15da1-8008-414d-801d-78138d7dc6fb" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;[&#10;	{&#10;		"employee1": {&#10;			"firstName": "Aanya",&#10;			"lastName": "Wavy",&#10;			"age": 20&#10;		}&#10;	},&#10;	{&#10;		"employee2": {&#10;			"firstName": "Bob",&#10;			"lastName": "Brown",&#10;			"age": 25&#10;		}&#10;	}&#10;]]' doc:name="Set Payload" doc:id="d7b10348-d6ef-4345-a818-cf480e8473f9" />
+		<ee:transform doc:name="Transform Message" doc:id="5aa05955-25f7-4fb2-94c3-977e2b6880ec" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+---
+employees:
+	employee @(
+		firstName: payload[0].employee1.firstName,
+		lastName: payload[0].employee1.lastName,
+	): null]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="emplyees" format="json">
+      <types:shape format="weave" example="examples/EmplyoeesSample.json"><![CDATA[%dw 2.0
+
+type emplyees = Array<{|  employee1: {|    firstName: String,     lastName: String,     age: Number {"typeId": "int"}  |},   employee2: {|    firstName: String,     lastName: String,     age: Number {"typeId": "int"}  |}|}> {"example": "[{\\\"employee1\\\":{\\\"firstName\\\":\\\"Aanya\\\",\\\"lastName\\\":\\\"Wavy\\\",\\\"age\\\":20}},{\\\"employee2\\\":{\\\"firstName\\\":\\\"Bob\\\",\\\"lastName\\\":\\\"Brown\\\",\\\"age\\\":25}}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#5aa05955-25f7-4fb2-94c3-977e2b6880ec">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="emplyees[]"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

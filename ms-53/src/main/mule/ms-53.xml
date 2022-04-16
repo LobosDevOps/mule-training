@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ms-52="http://www.mulesoft.org/schema/mule/ms-52" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ms-52 http://www.mulesoft.org/schema/mule/ms-52/current/mule-ms-52.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="81768c14-c21d-4462-8193-6cebb1069189" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<ms-52:config name="Ms_52_Config" doc:name="Ms-52 Config" doc:id="a6764fed-e652-4fb9-9fdb-4eab668528d0" property_host="anypoint.mulesoft.com" property_port="443" property_protocol="HTTPS" property_basePath="/mocking/api/v1/sources/exchange/assets/70bf3360-4b1b-4025-aa3e-93ce6e347a19/ms-52/1.0.0/m" />
+	<flow name="ms-53Flow" doc:id="8181b97c-0068-4425-a1fc-154808cfe800" >
+		<http:listener doc:name="Listener" doc:id="1fade3cf-0903-4e4a-a0a0-bd88a9fabb61" config-ref="HTTP_Listener_config" path="/api"/>
+		<ms-52:get-flights doc:name="Get flights" doc:id="aae2f6a5-d45a-40c1-8291-f7eef0ae9d1a" config-ref="Ms_52_Config"/>
+	</flow>
+</mule>

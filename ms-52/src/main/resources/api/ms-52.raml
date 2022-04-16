@@ -1,0 +1,27 @@
+#%RAML 1.0
+title: ms-52
+version: 1.0
+
+/flights:
+  get:
+    responses:
+      200:
+      400:
+  
+  /airline:
+    get:
+      queryParameters:
+        code: string
+      responses:
+        200:
+        400:
+
+/accounts:
+  get:
+    responses:
+      200:
+      400:
+  post:
+    responses:
+      201:
+    

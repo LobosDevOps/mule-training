@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="b09aa678-4dba-4a7a-861c-9d905de67c7a" >
+		<file:connection workingDir="C:\work\Mulesoft\mule-training\ms-51\src\test\resources" />
+	</file:config>
+	<flow name="ms-51Flow" doc:id="2d07e739-d232-4231-95d0-5e12633b6062" >
+		<file:listener doc:name="daily" doc:id="1dbcb396-85b7-4090-9daf-7d9f9d3321bb" moveToDirectory="daily" renameTo='#[attributes.fileName as String ++ ".bak"]' config-ref="File_Config" directory="daily">
+			<scheduling-strategy >
+				<fixed-frequency frequency="30" timeUnit="SECONDS" />
+			</scheduling-strategy>
+		</file:listener>
+		<set-payload value="Finished" doc:name="Finished" doc:id="fda4102d-3949-46c7-8e62-eb1ef92e6abe" />
+	</flow>
+</mule>

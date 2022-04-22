@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="63ee3259-5396-426b-bdb3-d5cef015ef7e" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="43b59cb4-8dbd-42d0-bf58-2f2947dd7168" >
+		<http:request-connection host="localhost" port="8082" />
+	</http:request-config>
+	<flow name="demo-a1Flow" doc:id="9304586e-19bf-4e1a-aa68-b32f9120f296" >
+		<http:listener doc:name="get /api" doc:id="790ec2de-72eb-4e41-a9eb-e1af699a1b6d" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="From demo-a1" doc:name="From demo-a1" doc:id="764f3388-5939-4681-a427-a2970654c197" />
+		<http:request method="POST" doc:name="post /demoa2" doc:id="67ae5648-a796-4e0f-ae26-0c1020a35c4e" config-ref="HTTP_Request_configuration" path="/demoa2"/>
+		<logger level="INFO" doc:name="payload" doc:id="8ab0a8be-15ab-4551-a088-d41b29377c2e" message="#[payload]"/>
+	</flow>
+</mule>

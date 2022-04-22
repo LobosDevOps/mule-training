@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ee175b4a-5f59-4c79-aa95-aaf9c593b92b" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<flow name="demo-a2Flow" doc:id="b553ddab-1f5b-47cd-8768-e46549008bab" >
+		<http:listener doc:name="post /demoa2" doc:id="182fb6c8-e35d-475f-a375-8a6cbfd9cf0b" config-ref="HTTP_Listener_config" path="/demoa2" allowedMethods="POST"/>
+		<logger level="INFO" doc:name="param payload " doc:id="02b87b98-e2fe-43cc-8468-1d9225042f88" message="#[payload]"/>
+		<set-payload value="from demo-a2" doc:name="from demo-a2" doc:id="98328d52-ce4a-43fe-8e36-a9efb2fe2726" />
+	</flow>
+</mule>

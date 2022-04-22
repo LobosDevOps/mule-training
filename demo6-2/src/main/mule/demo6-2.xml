@@ -6,11 +6,11 @@
 	<flow name="demo6-2Flow" doc:id="e7f1e650-a7e7-452f-9802-fba5d1036645" >
 		<scheduler doc:name="Scheduler" doc:id="1bbaf8df-624d-4474-89c9-a8b3281edff0" >
 			<scheduling-strategy >
-				<fixed-frequency />
+				<fixed-frequency frequency="10" timeUnit="SECONDS"/>
 			</scheduling-strategy>
 		</scheduler>
 		<set-payload value="#[{'year':'2000'}]" doc:name="{'year':'2000'}" doc:id="5ab73aa2-8b0d-4cbf-92b9-96ec4cb67d26" />
-		<logger level="INFO" doc:name='"The year is "++ payload.year' doc:id="dabf88f1-ecfa-4fd1-a57f-6d5106d91942" message='#["The year is " ++ payload.year]'/>
-		<logger level="INFO" doc:name='The year is #[payload.year]' doc:id="153cd41e-59da-463f-93c4-a0601675c572" message="The year is #[payload.year]" />
+		<logger level="INFO" doc:name='"The year is "++ payload.year' doc:id="dabf88f1-ecfa-4fd1-a57f-6d5106d91942" message='The year is #[payload.year]'/>
+		<logger level="INFO" doc:name='The year is #[payload.year]' doc:id="153cd41e-59da-463f-93c4-a0601675c572" message='#["The year is " ++ payload.year]' />
 	</flow>
 </mule>

@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></mule>
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4af2f0c7-c4a6-4eb9-ab0b-72f552c9008e" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="d31171a9-14e7-4e9b-9887-ab71cb42cda9" >
+		<file:connection workingDir="C:\work\Mulesoft\mule-training\ms-30\src\test\resources" />
+	</file:config>
+	<flow name="ms-30Flow" doc:id="c7ab1596-262b-4179-b961-fc8a93dd0d39" >
+		<http:listener doc:name="Listener" doc:id="ef0e7a6a-df20-440d-872f-2b6a5f93661b" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value='#[%dw 2.0&#10;output application/json&#10;var objects = {&#10;	"account":{&#10;		"accountId": "100001",&#10;		"name": "account1",&#10;		"balance": 100001&#10;	},&#10;	"account":{&#10;		"accountId": "100002",&#10;		"name": "account2",&#10;		"balance": 100002&#10;	},&#10;	"account":{&#10;		"accountId": "100003",&#10;		"name": "account3",&#10;		"balance": 100003&#10;	},&#10;}&#10;---&#10;objects]' doc:name="Set Payload" doc:id="dd369264-d0d2-48f7-80e6-81a1606a4066" />
+		<foreach doc:name="For Each" doc:id="85795e3e-6c36-4680-8a80-a2de417df2f6" batchSize="2">
+			<file:write doc:name="Write" doc:id="1aac9941-fed0-41fc-a0d2-5bfca575f654" config-ref="File_Config" path='#["output/account-" ++ random()]'>
+				<file:content ><![CDATA[#[%dw 2.0 output application/json ---payload]]]></file:content>
+			</file:write>
+		</foreach>
+	</flow>
+</mule>

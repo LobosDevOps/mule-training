@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="56befbf3-6642-4916-899a-63c9ac56145e" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="871b0baa-4348-4669-a7f6-4356ef4d84b3" >
+		<wsc:connection wsdlLocation="http://mu.learn.mulesoft.com/delta?wsdl" service="TicketServiceService" port="TicketServicePort" address="http://mu.learn.mulesoft.com/delta" />
+	</wsc:config>
+	<flow name="ms-39Flow" doc:id="9f94e4ae-908f-4cc4-8010-abb62a5ef436" >
+		<http:listener doc:name="Listener" doc:id="77ace7af-df3f-488f-8616-b05c7d5e74e8" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-variable value="aaa" doc:name="Set Variable" doc:id="046b57a8-adc6-4092-9497-f9da917c2a60" variableName="aaa"/>
+		<set-payload value='#[%dw 2.0&#10;output application/xml&#10;ns ns0 http://soap.training.mulesoft.com/&#10;---&#10;{&#10;	ns0#findFlight: {&#10;		destination: "LAX"&#10;	}&#10;}]' doc:name="destination xml" doc:id="6cfbcfc4-1d6a-46a5-8f83-ef49a0e3dcf9" />
+		<wsc:consume operation="findFlight" doc:name="Consume" doc:id="43dcc208-e01d-4de0-8fc8-a45671a5ef5f" config-ref="Web_Service_Consumer_Config"/>
+		<ee:transform doc:name="Transform Message" doc:id="0ce35ea7-70b7-4b09-a147-213c25ff32c4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

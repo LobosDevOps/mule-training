@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="aad5a7dd-a4c5-4d2c-8fbf-1024dd88eff3" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
 	<flow name="demo9-1Flow" doc:id="05b4d6de-3ef6-419a-98d5-f9044b2fb224" >
 		<http:listener doc:name="Listener" doc:id="cef6402a-c324-4d37-b0dd-7d638a0f6bab" config-ref="HTTP_Listener_config" path="/api"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3b3ff55e-a4db-4a91-babc-e8067606ff35" />
 		<scatter-gather doc:name="Scatter-Gather" doc:id="2d107549-4fdf-45f2-9da3-c34d0eff612f" >
 			<route >
 				<flow-ref doc:name="setPayload100" doc:id="10365e24-22a7-43ae-83f1-86513591f20c" name="setPayload100"/>
@@ -33,5 +35,6 @@ payload]]></ee:set-payload>
 	</flow>
 	<flow name="setPayload200" doc:id="de359a82-b1c1-4d31-99c9-34fda0a41f03" >
 		<set-payload value='200' doc:name="200" doc:id="7e849ff4-cc2d-4e68-9908-493818872e6b" />
+		<validation:is-null doc:name="payload Is null" doc:id="e5db7934-5f09-4f0c-ac1d-7ab6f222832f" value="#[payload]" message="setPayload200 Error"/>
 	</flow>
 </mule>

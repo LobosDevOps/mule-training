@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="98e567ad-b41d-4ae4-a76b-b78988d9330c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="wt13-q-1Flow" doc:id="ef933461-0dc9-471b-b4f8-ff0586aaa5f9" >
+		<http:listener doc:name="Listener" doc:id="48e0b33b-658a-4e28-987e-3a9ad807481d" config-ref="HTTP_Listener_config" path="/api" />
+		<set-payload value="#[[1,2,3]]" doc:name="to [1,2,3]" doc:id="7235d7de-394e-4661-9b2d-b80fa5f85e6e" />
+		<batch:job jobName="Batch_Job" doc:id="27a951b6-3a64-405b-9471-14d7fe5b6c0e" >
+			<batch:process-records >
+				<batch:step name="Batch_Step1" doc:id="ffe48d76-3a5b-450f-a985-4cea1ffd513b" >
+					<set-variable value="#[payload]" doc:name="batchStepPayload to payload" doc:id="917e6a00-08b6-483c-8374-2b1ca38a3ba8" variableName="batchStepPayload" />
+					<logger level="INFO" doc:name="Logger" doc:id="daa050ec-14eb-4f03-bb11-5847f7fb4648" />
+				</batch:step>
+				<batch:step name="Batch_Step2" doc:id="5469da10-0490-4fb2-9398-333a9cdf6986" >
+					<set-variable value="#[vars.batchStepPayload + 10]" doc:name="increment batchStepPayload+ 10" doc:id="e2c83c51-6339-4134-ab8a-a8f400483d20" variableName="batchStepPayload" />
+					<set-payload value="#[vars.batchStepPayload]" doc:name="to var batchStepPayload" doc:id="0fb26a19-e3de-4002-8f52-a90fcf2a4b05" />
+					<logger level="INFO" doc:name="payload" doc:id="7a97f952-763e-4599-bb3b-1463adad6028" message="############### payload: #[payload]"/>
+					<logger level="INFO" doc:name="Batch Step :--------------- var batchStepPayload: #[vars.batchStepPayload] " doc:id="50e4c774-f3d8-4ccd-a697-a351af38dbfa" message="Batch Step :--------------- var batchStepPayload: #[vars.batchStepPayload] " />
+				</batch:step>
+			</batch:process-records>
+		</batch:job>
+	</flow>
+</mule>

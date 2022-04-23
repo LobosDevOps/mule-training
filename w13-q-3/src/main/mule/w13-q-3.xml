@@ -11,6 +11,7 @@ http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/ba
 	<flow name="wt13-q-1Flow" doc:id="ef933461-0dc9-471b-b4f8-ff0586aaa5f9" >
 		<http:listener doc:name="Listener" doc:id="48e0b33b-658a-4e28-987e-3a9ad807481d" config-ref="HTTP_Listener_config" path="/api" />
 		<set-payload value="#[[1,2,3]]" doc:name="to [1,2,3]" doc:id="7235d7de-394e-4661-9b2d-b80fa5f85e6e" />
+		<logger level="INFO" doc:name="payload" doc:id="087c470a-1eb5-4636-a4e3-0b3b1b340085" message="#[payload]"/>
 		<batch:job jobName="Batch_Job" doc:id="27a951b6-3a64-405b-9471-14d7fe5b6c0e" >
 			<batch:process-records >
 				<batch:step name="Batch_Step1" doc:id="ffe48d76-3a5b-450f-a985-4cea1ffd513b" >

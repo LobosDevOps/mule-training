@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="396f0e5c-b613-4d8a-a78e-809b4aa1dfb9" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="w13-q-5Flow" doc:id="c5430530-3581-4f82-b4b8-2fd227c30b04" >
+		<http:listener doc:name="Listener" doc:id="612fb015-3b9c-4591-8839-ad7475e93154" config-ref="HTTP_Listener_config" path="/api" />
+		<set-payload value="#[[1,2]]" doc:name="[1,2]" doc:id="77871622-3917-45c3-9a9a-08801c8eee03" />
+		<batch:job jobName="w13-q-5Batch_Job" doc:id="050b7f8e-bc27-452c-b9a3-41096efe053a" >
+			<batch:process-records >
+				<batch:step name="Batch_Step1" doc:id="3013330c-3036-4fad-b58f-96e7e7c3e7bc" >
+					<logger level="INFO" doc:name="Batch_Step1 log !" doc:id="dc6fedb3-ccf2-4b99-8836-b03540fc3f00" message="Batch_Step1 log !"/>
+				</batch:step>
+				<batch:step name="Batch_Step2" doc:id="e468e8af-8fd2-4672-bd69-eb3abad6b26f">
+					<logger level="INFO" doc:name="Batch_Step 2 start log !" doc:id="aab853ac-2f7d-459d-9cc9-7188f1a672f4" message="Batch_Step 2 start log !" />
+					<choice doc:name="Choice" doc:id="11387391-7f71-4ee2-b8a6-9ea4e6fa0111" >
+						<when expression="#[payload == 2]">
+							<validation:is-null doc:name="Is null" doc:id="1a9f2ff5-6061-45aa-9c5f-9e923fd4bb64" value="#[payload]"/>
+						</when>
+						<otherwise >
+							<logger level="INFO" doc:name="other" doc:id="957f5cdb-5201-4036-b242-e972c9b70ff8" message="other"/>
+						</otherwise>
+					</choice>
+					<logger level="INFO" doc:name="Batch_Step 2 End log !" doc:id="67c247fe-22bc-4e85-9fcf-832f7c6021c7" message="Batch_Step 2 End log !" />
+				</batch:step>
+				<batch:step name="Batch_Step3" doc:id="d6577532-1653-458d-b2c0-a546fe523b4c" >
+					<logger level="INFO" doc:name="Batch_Step3 log !" doc:id="d3903e0b-e357-4afc-8e73-e8e7d8b05bf4" message="Batch_Step3 log !" />
+				</batch:step>
+			</batch:process-records>
+			<batch:on-complete>
+				<logger level="INFO" doc:name="payload" doc:id="d1461f80-2941-4528-b97f-9201268197eb" message="****************result: #[payload]" />
+			</batch:on-complete>
+		</batch:job>
+	</flow>
+</mule>

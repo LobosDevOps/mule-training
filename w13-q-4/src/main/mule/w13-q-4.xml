@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="7fc7ca79-9fce-4371-92c0-7e8ad3e890a1" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="694d051a-1298-4608-a47d-dce2b4a4f534" >
+		<file:connection workingDir="C:\work\Mulesoft\mule-training\w13-q-4\src\test\resources"/>
+	</file:config>
+	<file:config name="File_Config1" doc:name="File Config" doc:id="743d0576-1f65-4b00-a429-25e936ebd4db" >
+		<file:connection workingDir="C:\work\Mulesoft\mule-training\w13-q-4\src\test\resources" />
+	</file:config>
+	<flow name="ms-30Flow" doc:id="4d58dc8d-9961-41a3-b7b1-bcbdca5bd5c2" >
+		<http:listener doc:name="Listener" doc:id="34b468ec-15a8-4069-9169-894db7e19455" config-ref="HTTP_Listener_config" path="/api" />
+		<set-payload value='#[//%dw 2.0&#10;//output application/json&#10;//var objects = &#10;{&#10;	"account":{&#10;		"accountId": "100001",&#10;		"name": "account1",&#10;		"balance": 100001&#10;	},&#10;	"account":{&#10;		"accountId": "100002",&#10;		"name": "account2",&#10;		"balance": 100002&#10;	},&#10;	"account":{&#10;		"accountId": "100003",&#10;		"name": "account3",&#10;		"balance": 100003&#10;	},&#10;}&#10;//---&#10;//objects]' doc:name="Set Payload" doc:id="a59fa4fd-820f-43ee-abeb-039d3ba0d476" />
+		<foreach doc:name="For Each" doc:id="eb042d85-8202-419d-8624-01543bffa2f3" batchSize="2">
+			<file:write doc:name="Write" doc:id="c00a721c-fd76-4585-9f9b-fd1e0899c22b" config-ref="File_Config1" path='#["output/account-" ++ random()]'>
+				<file:content ><![CDATA[#[%dw 2.0 output application/json ---payload]]]></file:content>
+			</file:write>
+		</foreach>
+		<logger level="INFO" doc:name="Logger" doc:id="fea2c478-8663-4e27-afd2-b981d1f8ae10" message="#[typeOf(payload)]"/>
+	</flow>
+</mule>

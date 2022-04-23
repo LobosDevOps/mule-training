@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="265ed5bc-c6c2-4879-8601-cd14297cb591" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="wt13-q-1Flow" doc:id="a5228c75-9c4d-4e35-a33a-da5ad5ba306f" >
+		<http:listener doc:name="Listener" doc:id="56bb2818-0833-4de3-a529-4019a6b7623a" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-variable value="#[1]" doc:name="counter to 1" doc:id="8d1ad48b-a649-4a78-b9e0-6c2e4bea9eec" variableName="counter"/>
+		<set-payload value="#[[1,2,3]]" doc:name="to [1,2,3]" doc:id="b66e75f6-1196-4de7-a547-1201df1859f7" />
+		<batch:job jobName="Batch_Job" doc:id="99f4f4e7-0ed6-465a-9081-b43978fea395" >
+			<batch:process-records >
+				<batch:step name="Batch_Step" doc:id="63ddcd7e-8dc0-44c2-83ef-f528071a9e75" >
+					<set-variable value="#[vars.counter + 10]" doc:name="increment counter + 10" doc:id="3d60f2dc-66c7-4721-9a27-e3a8977ddec4" variableName="counter"/>
+					<set-variable value="#[vars.counter]" doc:name="stepVar to counter var" doc:id="092876da-e802-4644-8be5-e1456cca5a7c" variableName="stepVar"/>
+				</batch:step>
+			</batch:process-records>
+		</batch:job>
+		<logger level="INFO" doc:name="vars.counter and vars.stepVar" doc:id="0d2ddb63-3a7b-4dbe-9166-5459de290458" message="var counter: #[vars.counter] ;  var stepVar: #[vars.stepVar]"/>
+	</flow>
+</mule>

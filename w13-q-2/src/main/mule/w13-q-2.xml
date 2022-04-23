@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c832686b-19f5-49fe-8ca9-484062b2ddeb" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="wt13-q-1Flow" doc:id="f3404421-1e0c-4bdd-b422-4f223ea17cff" >
+		<http:listener doc:name="Listener" doc:id="cbc85d68-f393-488c-be53-1910efb403fd" config-ref="HTTP_Listener_config" path="/api" />
+		<set-variable value="#[1]" doc:name="counter to 1" doc:id="c5ff90a6-098f-4177-b203-ebf5c322ecd8" variableName="counter" />
+		<set-payload value="#[[1,2,3]]" doc:name="to [1,2,3]" doc:id="aaab1241-2189-48bc-8ace-17b870c9213c" />
+		<batch:job jobName="Batch_Job" doc:id="122c5d63-31b5-46c2-9ad7-9b715b248675" >
+			<batch:process-records >
+				<batch:step name="Batch_Step" doc:id="209537b1-f667-49af-a331-d519c90e7272" >
+					<set-variable value="#[vars.counter + 10]" doc:name="increment counter + 10" doc:id="0f55abad-be49-4c6e-9ebc-e4aef2973923" variableName="counter" />
+					<set-variable value="#[vars.counter]" doc:name="stepVar to counter var" doc:id="482b297d-210e-4a83-bb35-4cb6a9f739b5" variableName="stepVar" />
+					<logger level="INFO" doc:name="Batch Step :--------------- var counter: #[vars.counter] ;  var stepVar: #[vars.stepVar]" doc:id="3c779805-a026-4e90-9bd1-7287a78eee66" message="Batch Step :--------------- var counter: #[vars.counter] ;  var stepVar: #[vars.stepVar]"/>
+				</batch:step>
+			</batch:process-records>
+			<batch:on-complete >
+				<logger level="INFO" doc:name="vars.counter and vars.stepVar" doc:id="81474ba1-8ce5-4f15-9832-21713d5d7094" message="var counter: #[vars.counter] ;  var stepVar: #[vars.stepVar]" />
+			</batch:on-complete>
+		</batch:job>
+	</flow>
+</mule>

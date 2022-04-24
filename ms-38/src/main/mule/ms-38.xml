@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ddfe2757-6756-41e4-ad26-10a08e5ef589" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="ms-38Flow" doc:id="a1e7888a-3270-4511-8aa4-1a8768b9c6f2" >
+		<http:listener doc:name="Listener" doc:id="ce30e2f3-6f41-4688-8a02-12d4bf9c62c3" config-ref="HTTP_Listener_config" path="/api" />
+		<set-payload value='#[["Apple", "Banana"]]' doc:name='["Apple", "Banana"]' doc:id="354476ae-558e-4d51-93fc-30b1d4561aa9" />
+		<batch:job jobName="ms-38Batch_Job" doc:id="fbeab021-6ae3-4ec6-8598-e4fab04bd573" >
+			<batch:process-records >
+				<batch:step name="Batch_Step1" doc:id="ee9043aa-2a56-46eb-be35-15a008faf166" >
+					<set-payload value='#[payload ++ "1"]' doc:name='payload ++ "1"' doc:id="f2bf07a8-9026-446d-bcdf-787e19324129" />
+				</batch:step>
+				<batch:step name="Batch_Step2" doc:id="4f78fa69-de8e-443d-9bd7-61d0e68ed397" >
+					<set-payload value='#[payload ++ "2"]' doc:name='payload ++ "2"' doc:id="160e7f8e-3fc9-469f-a5f3-69196cdda92b" />
+				</batch:step>
+			</batch:process-records>
+			<batch:on-complete >
+				<logger level="INFO" doc:name="payload" doc:id="6766f79d-49e0-4dc6-bb0e-25db14def4ad" message="!!!!!!!!!!!!!!payload End : #[payload]"/>
+			</batch:on-complete>
+		</batch:job>
+	</flow>
+</mule>

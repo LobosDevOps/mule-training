@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="eb5e4823-4cbc-4085-8ccf-674c000d2c5a" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="ms-15Flow" doc:id="c09984c5-f227-4266-afa1-59664f327976" >
+		<http:listener doc:name="Listener" doc:id="cfa385a7-9ead-45b0-8a46-fd15457080f1" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="#[[2000,200,1000,100]]" doc:name="[2000,200,1000,100]" doc:id="889b1d3c-2b6d-41f8-bcca-adfc6436805d" />
+		<foreach doc:name="For Each" doc:id="91d6fc81-5cfa-4e73-8e53-1737eee0eb26" >
+			<set-payload value="#[%dw 2.0&#10;import * from dw::Runtime&#10;output application/json&#10;---&#10;{&#10;    payload: payload&#10;} wait payload // wait 4 seconds]" doc:name='Wait for "payload" miliseconds' doc:id="a8fae25d-192c-45bc-b7c6-56d69ad0c1dc" />
+			<logger level="INFO" doc:name="payload" doc:id="fb45334b-7543-4c07-bca9-3478613733e4" message="#[payload]"/>
+		</foreach>
+		<set-payload value="#[[4000,40,3000,300]]" doc:name="[4000,40,3000,300]" doc:id="cc716c8e-fc00-43f2-830e-08d3e41e8512" />
+		<batch:job jobName="ms-15Batch_Job" doc:id="5ddec5bc-aae4-4822-9109-81e34eb799e2" blockSize="1">
+			<batch:process-records >
+				<batch:step name="Batch_Step" doc:id="a0e04218-8e55-4fda-ae0d-2f7d1a610e1d" >
+					<set-payload value="#[%dw 2.0&#10;import * from dw::Runtime&#10;output application/json&#10;---&#10;{&#10;    batch_payload: payload&#10;} wait payload // wait 4 seconds]" doc:name='Wait for "payload" miliseconds' doc:id="5641baa2-cb8f-49bc-ace5-2b6a3d31e0dc" />
+					<logger level="INFO" doc:name="payload" doc:id="1a3fc34e-bb74-4463-8125-ebdca79502b8" message="#[payload]" />
+				</batch:step>
+			</batch:process-records>
+		</batch:job>
+	</flow>
+</mule>

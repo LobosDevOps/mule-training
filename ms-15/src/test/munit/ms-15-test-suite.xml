@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="ms-15-test-suite.xml" />
+	<munit:test name="ms-15-test-suite-ms-15FlowTest" doc:id="d52ab8a8-4ee5-4572-8f9a-ba598e678de4" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="fb7f9484-3d50-4edb-98fb-cf414ab85897" processor="set-payload">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue='Wait for "payload" miliseconds' attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a8fae25d-192c-45bc-b7c6-56d69ad0c1dc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[payload]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<logger level="INFO" doc:name="mock: #[payload]" doc:id="6b4a7709-0c70-45bb-bf84-361034f62073" message="mock: #[payload]"/>
+			<munit-tools:sleep time="#[payload as Number]" doc:name="Sleep" doc:id="723087c2-1027-463a-b8ab-17c544e0cad9" />
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to ms-15Flow" doc:id="5e1a8927-7479-4a15-85fb-e96ace94012a" name="ms-15Flow"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>

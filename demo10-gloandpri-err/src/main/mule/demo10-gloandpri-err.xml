@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a6934317-35b8-45d5-b257-276d1b6cbba3" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo10-gloandpri-errFlow" doc:id="586bb36f-9217-4a47-bb00-077be6ff28f2" >
+		<http:listener doc:name="Listener" doc:id="527bf1e9-243c-425f-8f16-5be60bc80fcb" config-ref="HTTP_Listener_config" path="/api"/>
+		<set-payload value="#[null]" doc:name="payload null" doc:id="6d605740-44b2-4ea4-8ccf-e291b96027ce" />
+		<validation:is-not-null doc:name="payload" doc:id="414994b0-bb29-44dd-9e2b-e7cb543e1517" value="#[payload]"/>
+		<logger level="INFO" doc:name="success" doc:id="7dd3feac-81f3-4830-bdcd-d7f2759cf44c" message="success"/>
+ <error-handler >
+		
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="98c4b35d-38af-4ec4-aab7-5c25cb05e87d" >
+				<logger level="INFO" doc:name="private Error" doc:id="cc7d6e5a-6f95-4533-9779-107733dafbb3" message="private Error"/>
+				<logger level="INFO" doc:name="Logger" doc:id="1d59753f-6f53-4d78-b5f2-22090c3b3371" />
+			</on-error-propagate>
+			
+		</error-handler>
+
+	</flow>
+</mule>

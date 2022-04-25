@@ -21,5 +21,6 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 				<file:content ><![CDATA[#[%dw 2.0 output application/json ---payload]]]></file:content>
 			</file:write>
 		</foreach>
+		<logger level="INFO" doc:name="payload" doc:id="a744fcaa-cb5c-44ab-880d-e1bb83a24925" message="result payload : #[payload]"/>
 	</flow>
 </mule>

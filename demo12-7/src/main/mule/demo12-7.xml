@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c2b5bdb9-9872-4256-9ff9-7143d5aa0d48" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="fd447396-ffbd-434a-87cc-55d03951dd6c" >
+		<jms:active-mq-connection />
+	</jms:config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="546cf39b-7c80-49c4-addc-936c6b2729c4" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="demo12-6Flow" doc:id="408876f3-4e63-448f-8c96-3f142a8cc79e" >
+		<http:listener doc:name="POST Hello-" doc:id="8afce7d5-d58a-4728-9fff-4ceff9beb342" config-ref="HTTP_Listener_config" path="/api" allowedMethods="POST"/>
+		<jms:publish doc:id="5a237476-31d2-4f53-9a13-79c8537bb554" config-ref="JMS_Config" destination="jms1" doc:name="jms one" />
+		<http:request method="POST" doc:name="Request" doc:id="23833d68-46cf-4b97-8c74-911b242229f2" config-ref="HTTP_Request_configuration" path="/data2"/>
+		<jms:publish-consume doc:id="d9fb3424-1152-43ff-9413-95e93f5a8f92" config-ref="JMS_Config" destination="jms2" doc:name="jms two" />
+		<set-payload value='#[payload ++ "Three"]' doc:name='payload ++ "Three"' doc:id="06935840-2a6e-4fdb-9c49-fc8bc11ce09e" />
+		<logger level="INFO" doc:name="main flow" doc:id="919fed37-983c-4015-9825-5458215b0b09" message="#['mainflow' ++ payload]" />
+	</flow>
+	<flow name="demo12-7Flow" doc:id="cad0ea13-b09d-41e3-b640-5d3c4b239247" >
+		<http:listener doc:name="Listener" doc:id="65077651-714b-4344-9cf2-76deb95f6e5c" config-ref="HTTP_Listener_config" path="/data2" allowedMethods="POST"/>
+		<set-payload value='#[payload ++ "HTTP-"]' doc:name='payload ++ "HTTP"' doc:id="08e029a7-0e41-4965-bd66-d0fb43118079" />
+	</flow>
+	<flow name="JMS1" doc:id="d432a146-2e99-419a-b2a2-7076639aca2d" >
+		<jms:listener doc:name="jms1" doc:id="8de78a14-5a74-4cbb-a9c3-d1dc68396a56" config-ref="JMS_Config" destination="jms1" >
+			<jms:consumer-type >
+				<jms:queue-consumer />
+			</jms:consumer-type>
+		</jms:listener>
+		<set-payload value='#[payload ++ "JMS1-"]' doc:name='payload ++ "JMS1"' doc:id="1eb56ca4-30a2-45ca-8f39-0ef5a51a9c42" />
+		<logger level="INFO" doc:name="jms1" doc:id="57c92b21-e47f-4ab4-9df6-19cdcc300b7a" message="#['jms1:' ++ payload]" />
+	</flow>
+	<flow name="JMS2" doc:id="370b1862-edbe-45c2-bb53-c6a6213fb792" >
+		<jms:listener doc:name="jms2" doc:id="acc290e1-33e6-422f-a796-56ae40d5e2fd" config-ref="JMS_Config" destination="jms2" >
+			<jms:consumer-type >
+				<jms:queue-consumer />
+			</jms:consumer-type>
+		</jms:listener>
+		<set-payload value='#[payload ++ "JMS2-"]' doc:name='payload ++ "JMS2"' doc:id="bf9e2b33-1f5f-494d-a194-021e04d2e5e0" />
+		<logger level="INFO" doc:name="jms2" doc:id="df8e9e5b-38ce-424e-a4e6-52cf08f7b5f7" message="#['jms2:' ++ payload]" />
+	</flow>
+</mule>

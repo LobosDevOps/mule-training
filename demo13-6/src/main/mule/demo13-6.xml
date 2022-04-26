@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0d956d34-135e-4010-90db-af81edd17468" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo13-5Flow" doc:id="5b834ec0-0dd1-4be6-9fd2-4ebe79b97a60" >
+		<http:listener doc:name="Listener" doc:id="ea72671c-4216-410e-b813-41e300224e7b" config-ref="HTTP_Listener_config" path="/api" />
+		<set-payload value="#[[1,2,3,4,5,6]]" doc:name="[1,2,3,4,5,6]" doc:id="27dbabe5-6f70-40dc-9dca-2061d62ec5a0" />
+		<batch:job jobName="demo13-5Batch_Job" doc:id="260d6516-fa4a-442d-93cc-b543f56e354d" >
+			<batch:process-records >
+				<batch:step name="Batch_Step_payload_mod_2_is_0" doc:id="6f1002e7-0093-47df-a755-8f363be7f885" acceptExpression='(payload mod 2)==0' >
+					<ee:transform doc:name="Multiply by 10" doc:id="d45c6cf5-bc57-4b89-a6f4-94ec5bfdb16d" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0 output application/json --- payload * 10]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<batch:aggregator doc:name="Batch Aggregator by 2" doc:id="3087ce15-7c99-4675-b340-b82de36e089d" size="2" >
+						<logger level="INFO" doc:name="payload" doc:id="6a982d53-25c4-42bb-bc4a-c16736b2e06c" message="#[output application/json --- payload]" />
+					</batch:aggregator>
+				</batch:step>
+			</batch:process-records>
+		</batch:job>
+	</flow>
+</mule>

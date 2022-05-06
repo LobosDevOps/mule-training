@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a852da53-53b1-41c6-9b5d-3eb60722c4e4" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo10-gloandpri-errFlow" doc:id="801a8d4e-6057-44c0-8c6c-8489698389db" >
+		<http:listener doc:name="Listener" doc:id="7dc95434-3b3a-4321-8871-86c67521cdc9" config-ref="HTTP_Listener_config" path="/api" />
+		<set-payload value="#[null]" doc:name="payload null" doc:id="d97308b9-e74c-40fc-9e57-a5c966973847" />
+		<flow-ref doc:name="private" doc:id="cd4faa02-6d80-4799-8856-adcc5489c924" name="private"/>
+		<logger level="INFO" doc:name="success" doc:id="d66dd6c1-5252-4fc8-9905-5543a9a626de" message="success" />
+	</flow>
+	<flow name="private" doc:id="13a54029-68d4-4e72-a367-a26a8280b5d3" >
+		<validation:is-not-null doc:id="a87794a8-f643-4c46-8328-f4ee5bf2176a" value="#[payload]" doc:name="payload" />
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e510740c-4545-4b1f-8b7c-1a2c9c90b38a" >
+				<set-payload value="error private error" doc:name="error private error" doc:id="2a282eae-ac84-4cb7-8d28-caf942bbd1f1" />
+				<logger level="INFO" doc:name="private Error" doc:id="5546a0ca-2eb0-4757-b6c3-14d0f9b412d4" message="private Error" />
+				<logger level="INFO" doc:name="Logger" doc:id="3710e1d9-71e6-4095-921c-30439ecd3c96" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

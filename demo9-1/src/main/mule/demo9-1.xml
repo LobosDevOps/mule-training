@@ -17,7 +17,10 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 				<flow-ref doc:name="setPayload100" doc:id="10365e24-22a7-43ae-83f1-86513591f20c" name="setPayload100"/>
 			</route>
 			<route >
-				<flow-ref doc:name="setPayload200" doc:id="bfea2fa0-22e5-49ed-8392-f8790a5d0520" name="setPayload200"/>
+				<flow-ref doc:name="setPayload30" doc:id="c701fbdf-6368-45aa-858d-f0bc1c0df00d" name="setPayload30" />
+			</route>
+			<route >
+				<flow-ref doc:name="setPayload200" doc:id="bfea2fa0-22e5-49ed-8392-f8790a5d0520" name="setPayload200" />
 			</route>
 		</scatter-gather>
 		<ee:transform doc:name="Transform Message" doc:id="6b4f45d2-1ce1-4500-8fd8-551ec8fd9ace">
@@ -36,5 +39,8 @@ payload]]></ee:set-payload>
 	<flow name="setPayload200" doc:id="de359a82-b1c1-4d31-99c9-34fda0a41f03" >
 		<set-payload value='200' doc:name="200" doc:id="7e849ff4-cc2d-4e68-9908-493818872e6b" />
 		<validation:is-null doc:name="payload Is null" doc:id="e5db7934-5f09-4f0c-ac1d-7ab6f222832f" value="#[payload]" message="setPayload200 Error"/>
+	</flow>
+	<flow name="setPayload30" doc:id="f53d100d-da35-4482-9073-75ab04fbb32f" >
+		<set-payload value="300" doc:name="300" doc:id="1999dcf9-69f1-42a9-a7ed-c972c863e0c8" />
 	</flow>
 </mule>
